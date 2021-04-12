@@ -59,7 +59,7 @@
         async run() {
           // Makes the API call and handle the results
           console.log(new Date().toISOString(), "[Test]", "Running the test");
-          const url = "http://api.openweathermap.org/data/2.5/weather?zip=37027,us&appid=25e989bd41e3e24ce13173d8126e0fd6";
+          const url = "https://api.openweathermap.org/data/2.5/weather?zip=37027,us&appid=25e989bd41e3e24ce13173d8126e0fd6";
           try {
             const response = await axios.get(url);
             this.setResults(response.data);
@@ -95,7 +95,7 @@
           city.innerHTML = results.name;
           date.innerHTML = this.getDate()
 
-          weatherImg.src =`http://openweathermap.org/img/wn/${icon}@2x.png`
+          weatherImg.src =`https://openweathermap.org/img/wn/${icon}@2x.png`
           
           this.testResults.innerHTML = (
             this.getFahrenheit(results.main.temp) + degree + "F" || ""
@@ -113,7 +113,7 @@
         // Makes an API call to get the weather using longitude and latitude
         async weatherCurrent(){
           try {
-            const url = `http://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${long}&appid=25e989bd41e3e24ce13173d8126e0fd6`
+            const url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${long}&appid=25e989bd41e3e24ce13173d8126e0fd6`
             const response = await axios.get(url);
             this.setResults(response.data)
           } catch (error) {
