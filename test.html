@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <title>FreightWise Programming Test</title>
+
+    <script>
+      "use strict";
+
+      /**
+       * Software Developer test.
+       *
+       * Doing research and making API calls are an important part of what we do at FreightWise.  This test will
+       * demonstrate your abilities to:
+       *
+       * - Make an API call
+       * - Research an API
+       * - Do basic DOM manipulation
+       * - Parse data
+       * - Handle errors
+       * - Be creative
+       *
+       * Feel free to ask any questions you may have.  Use a lot of comments, and explain why you are doing things.
+       * Don't spend more than 1-2 hours on it - we aren't expecting a finished product, but it should work and look
+       * nice.  Feel free to use any third party libraries, and if you do so, explain why you used them instead of
+       * built in browser APIs.
+       *
+       * Instructions:
+       * - Use the axios (https://github.com/axios/axios) request library to make an API call to the OpenWeatherMap
+       *   API for Current Weather Data using this API key:  25e989bd41e3e24ce13173d8126e0fd6
+       *   We've already imported this library to get you started.
+       * - Use either async/await or Promises.
+       * - Get the weather for Brentwood, TN, and write it to the DOM using the `setResults` method below.  Be
+       *   creative and make it look nice.
+       * - Handle errors and use the `setError` method below to display the error.  Also make it look nice.
+       * - If you find any mistakes in the test, fix them, and leave a comment about what you fixed and why.
+       * - Make sure your code is readable and maintainable.
+       * - Use plenty of descriptive comments.
+       * - Make sure your code runs in the latest version of Google Chrome and Firefox (ES6 is allowed).
+       * - Make your code live (GitHub with GitHub pages works nice).
+       * - Send a link to your finished test to hr+software@freightwisellc.com.
+       *
+       * If you have time, pick one of these:
+       * - Sign up for NewsAPI.org and get the Top Headlines and show them along with the weather.
+       * - Use the browser location API to get the user's current location, and show that location's weather.
+       * - Show a satellite map of the weather in Brentwood.
+       * - Request a user's phone number and send them an SMS with the weather.
+       */
+      class Test {
+        constructor() {
+          //Needed [0] because getElementsByClassName("test-results") returns a list of elements 
+          this.testResults = document.getElementsByClassName("test-results")[0];
+          this.testWeather = document.getElementsByClassName("Weather")[0];
+          this.testMap = document.getElementsByClassName("weather-map")[0]
+        }
+
+        async run() {
+          // Makes the API call and handle the results
+          console.log(new Date().toISOString(), "[Test]", "Running the test");
+          const url = "http://api.openweathermap.org/data/2.5/weather?zip=37027,us&appid=25e989bd41e3e24ce13173d8126e0fd6";
+          try {
+            const response = await axios.get(url);
+            this.setResults(response.data);
+          } catch (error) {
+            this.setError(error);
+          }
+
+          
+        }
+
+        setError(message) {
+          // Formats the error
+          this.testResults.innerHTML = (message || "").toString();
+        }
+        setResults(results) {
+          console.log(results);
+          // Formats the results
+          let degree = "\&deg";
+          let weatherImg = document.getElementById("weather-img") 
+          let humidity = document.getElementById("humidity");
+          let tempMax = document.getElementById("temp-max");
+          let tempMin = document.getElementById("temp-min");
+          let city = document.getElementById("city");
+          let cityWeather = document.getElementById("city-weather");
+          let date = document.getElementById("date")
+          let icon = results.weather[0].icon
+
+          // Add text to the DOM elements
+          humidity.innerHTML = "Humidity: " + results.main.humidity + "%";
+          tempMax.innerHTML = "Max Temputare: " + this.getFahrenheit(results.main.temp_max) + degree + "F";
+          tempMin.innerHTML = "Min Temputare: " + this.getFahrenheit(results.main.temp_min) + degree + "F";
+          cityWeather.innerHTML = results.weather[0].main;
+          city.innerHTML = results.name;
+          date.innerHTML = this.getDate()
+
+          weatherImg.src =`http://openweathermap.org/img/wn/${icon}@2x.png`
+          
+          this.testResults.innerHTML = (
+            this.getFahrenheit(results.main.temp) + degree + "F" || ""
+          ).toString();
+        }
+        // Calculates Fahrenheit
+        getFahrenheit(kelvin) {
+          return Math.round(((kelvin - 273.15) * 9) / 5 + 32);
+        }
+        // Formats Date
+        getDate() {
+          let date = new Date();
+          return ((date.getMonth() + 1) +"/" + date.getDate() + "/" +date.getFullYear());
+        }
+        // Makes an API call to get the weather using longitude and latitude
+        async weatherCurrent(){
+          try {
+            const url = `http://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${long}&appid=25e989bd41e3e24ce13173d8126e0fd6`
+            const response = await axios.get(url);
+            this.setResults(response.data)
+          } catch (error) {
+            console.log(error)
+          }
+        }
+      }
+    </script>
+
+    <style>
+      body {
+        background: #87EBD6 -webkit-gradient(linear, left top, left bottom, from(#87BDEB), to(#87EBD6)) no-repeat;
+        background: #87EBD6 -moz-linear-gradient(top, #87BDEB, #87EBD6) no-repeat;
+      }
+      .container {
+        margin-left: 20%;
+        margin-right: 20%;
+        display: flex;
+
+        justify-content: space-between;
+      }
+      .container-a {
+        display: flex;
+      }
+      .container-b {
+        padding-top: 12px;
+      }
+      .weather {
+        padding-top: 12px;
+        padding-left: 12px;
+      }
+      .test-results {
+        font: 5em sans-serif;
+      }
+      .button-container {
+        text-align: center;
+      }
+      .weather-map{
+        text-align: center;
+      }
+      .button-container > button {
+        margin: 0;
+        padding: 10px 18px;
+        color: white;
+        background-color: #008000;
+        border: none;
+        border-radius: 3px;
+        transition: all 200ms ease-in-out;
+        font-size: 14px;
+      }
+
+      .button-container > button:hover {
+        background-color: #00a000;
+      }
+
+      .button-container > button:active {
+        background-color: #006000;
+      }
+    </style>
+
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  </head>
+  <body>
+    <div class="container">
+      <div class="container-a">
+        <img id="weather-img">
+        <div class="test-results"></div>
+        <div class="weather">
+          <div id="humidity"></div>
+          <div id="temp-min"></div>
+          <div id="temp-max"></div>
+        </div>
+      </div>
+      <div class="container-b">
+        <div id="city"></div>
+        <div id="date"></div>
+        <div id="city-weather"></div>
+      </div>
+    </div>
+
+    <div class="button-container"></div>
+    <div class="weather-map"></div>
+
+    <script>
+      "use strict";
+
+      /**
+       * Creates a button for kicking off the test and adds it to the DOM.
+       *
+       * @param {HTMLElement} context  the parent element to add the button to
+       * @param {Test}        test     the test to be executed
+       * @returns {HTMLElement} the button added to the test
+       */
+      function addButtonForTest(context, test, clicked) {
+        let testButton = document.createElement("button");
+
+        testButton.type = "button";
+        testButton.innerText = "Get the Nashville Weather";
+        testButton.onclick = () => {
+          // check if user clicked button
+          if (clicked){
+            test.run()
+            clicked = false
+            testButton.innerText = "Get Your Weather";
+            // Location API to get longitude and latitude
+            navigator.geolocation.getCurrentPosition((position) => {
+            long = position.coords.longitude;
+            lat = position.coords.latitude;
+          })
+          } else {
+            if (lat !== null) {
+              test.weatherCurrent()
+            }
+            else {
+              alert("Location was blocked please refresh the page")
+            }
+          }
+          
+
+        };
+        context.appendChild(testButton);
+
+        return testButton;
+      }
+
+      // Create the Test and add a button to the UI for running the test
+      const test = new Test();
+      let clicked = true ; 
+      let long = null; // longitude
+      let lat = null; // latitude
+      const buttonContainer = document.getElementsByClassName(
+        "button-container"
+      )[0];
+
+      addButtonForTest(buttonContainer, test, clicked);
+    </script>
+  </body>
+</html>
