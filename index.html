@@ -211,13 +211,14 @@
         let testButton = document.createElement("button");
 
         testButton.type = "button";
-        testButton.innerText = testButton.innerText.replace("Get the Nashville Weather");
+        testButton.innerText = "Get the Nashville Weather"
+        
         testButton.onclick = () => {
           // check if user clicked button
           if (clicked){
             test.run()
             clicked = false
-            testButton.innerText = "Get Your Weather";
+            testButton.innerText = testButton.innerText.replace("Get Your Weather");
             // Location API to get longitude and latitude
             navigator.geolocation.getCurrentPosition((position) => {
             long = position.coords.longitude;
