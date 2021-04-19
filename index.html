@@ -218,7 +218,7 @@
           if (clicked){
             test.run()
             clicked = false
-            testButton.innerText = testButton.innerText.replace("Get Your Weather");
+            testButton.innerText = "Get Your Weather";
             // Location API to get longitude and latitude
             navigator.geolocation.getCurrentPosition((position) => {
             long = position.coords.longitude;
